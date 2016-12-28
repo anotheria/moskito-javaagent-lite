@@ -13,7 +13,7 @@ MoSKito Javaagent Light, a quick start of MoSKito Monitoring in your application
 
     
    By default port "-1" will be used for RMIRegistry start.. ( "-1" means  fetch first free  in range [9250 - 9299] to use  - or any other preset with 
-   proeprties ['localRmiRegistryMinPort' - 'localRmiRegistryMaxPort'] - if set) 
+   properties ['localRmiRegistryMinPort' - 'localRmiRegistryMaxPort'] - if set) 
    - You will be able to find real Registry port in Logs:
     	[main] INFO   o.m.j.LightTransformationAgent:83 - Starting Moskito backend on using -1 port! !
     	....
