@@ -17,7 +17,7 @@ MoSKito Javaagent Light, a quick start of MoSKito Monitoring in your application
    - You will be able to find real Registry port in Logs:
     	[main] INFO   o.m.j.LightTransformationAgent:83 - Starting Moskito backend on using -1 port! !
     	....
-    	[main] INFO   o.m.j.LightTransformationAgent:86 - Starting Moskito backend on 10000 port! Performed successfully!
+    	[main] INFO   o.m.j.LightTransformationAgent:83 - Started Moskito-backend on 9250 port!
  
 ### 2.1 Port pre-selection/re-define by property
 
