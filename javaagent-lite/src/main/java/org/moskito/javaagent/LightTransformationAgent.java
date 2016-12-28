@@ -6,8 +6,10 @@ import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
 import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
+import net.anotheria.util.StringUtils;
 import org.aspectj.weaver.loadtime.ClassPreProcessorAgentAdapter;
 import org.distributeme.core.RMIRegistryUtil;
+import org.distributeme.core.conventions.SystemProperties;
 import org.moskito.controlagent.endpoints.rmi.RMIEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,6 @@ import org.slf4j.LoggerFactory;
  * Main moskito-agent-light entry-point.
  */
 public class LightTransformationAgent implements ClassFileTransformer {
-	/**
-	 * Backend port property name.
-	 */
-	private static final String MOSKITO_BACKEND_PORT_PROPERTY_NAME = "moskitoBackendPort";
-
 	/**
 	 * Backend port default value.
 	 */
@@ -79,7 +76,7 @@ public class LightTransformationAgent implements ClassFileTransformer {
 	 */
 	private static void startMoskitoBackend() {
 		try {
-			int moskitoBackendPort = Integer.getInteger(MOSKITO_BACKEND_PORT_PROPERTY_NAME, MOSKITO_BACKEND_PORT_DEFAULT_VALUE);
+			int moskitoBackendPort = getBackendPort();
 			LOG.info("Starting Moskito-backend on using " + moskitoBackendPort + " port! !");
 			StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend(moskitoBackendPort);
 			RMIEndpoint.startRMIEndpoint();
@@ -89,6 +86,20 @@ public class LightTransformationAgent implements ClassFileTransformer {
 		}
 	}
 
+	/**
+	 * Fetch backend port.
+	 *
+	 * @return backend port property
+	 */
+	private static int getBackendPort() {
+		try {
+			if (StringUtils.isEmpty(SystemProperties.LOCAL_RMI_REGISTRY_PORT.get()))
+				return MOSKITO_BACKEND_PORT_DEFAULT_VALUE;
+			return SystemProperties.LOCAL_RMI_REGISTRY_PORT.getAsInt();
+		} catch (final NumberFormatException e) {
+			return MOSKITO_BACKEND_PORT_DEFAULT_VALUE;
+		}
+	}
 
 	@Override
 	public byte[] transform(final ClassLoader loader, final String className, Class<?> classBeingRedefined, final ProtectionDomain protectionDomain,
