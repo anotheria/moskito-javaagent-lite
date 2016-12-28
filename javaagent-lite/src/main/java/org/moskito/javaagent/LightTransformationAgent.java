@@ -78,7 +78,7 @@ public class LightTransformationAgent implements ClassFileTransformer {
 		try {
 			int moskitoBackendPort = getBackendPort();
 			LOG.info("Starting Moskito-backend on using " + moskitoBackendPort + " port! !");
-			StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend(moskitoBackendPort);
+			StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend();
 			RMIEndpoint.startRMIEndpoint();
 			LOG.info("Started Moskito-backend on " + RMIRegistryUtil.getRmiRegistryPort() + " port!");
 		} catch (final Throwable mise) {
