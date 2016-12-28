@@ -20,7 +20,8 @@ MoSKito Javaagent Light, a quick start of MoSKito Monitoring in your application
     	[main] INFO   o.m.j.LightTransformationAgent:86 - Starting Moskito backend on 10000 port! Performed successfully!
  
 ### 2.1 Port pre-selection/re-define by property
-   
+
+   Property 'localRmiRegistryPort'. Should provide positive int value.
    Simply add -DlocalRmiRegistryPort=[port value] - and if it's not used - backend will be started on it.
     
     
