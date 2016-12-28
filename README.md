@@ -31,10 +31,10 @@ MoSKito Javaagent Light, a quick start of MoSKito Monitoring in your application
     
    a) JAVA_OPTS="$JAVA_OPTS -javaagent:/[full_path]/javaagent-lite-1.0.0-SNAPSHOT.jar -DlocalRmiRegistryPort11=11000 " - start on 11000 if free ( error otherwise )
    
-   b) JAVA_OPTS="$JAVA_OPTS -javaagent:/[full_path]/javaagent-lite-1.0.0-SNAPSHOT.jar -DlocalRmiRegistryMinPort=50000 -DlocalRmiRegistryMaxPort=51000" - start on first free in range
-    [50000-51000]
+   b) JAVA_OPTS="$JAVA_OPTS -javaagent:/[full_path]/javaagent-lite-1.0.0-SNAPSHOT.jar -DlocalRmiRegistryMinPort=50000 -DlocalRmiRegistryMaxPort=51000" - start on first free,
+    range [50000-51000]
     
-   c) JAVA_OPTS="$JAVA_OPTS -javaagent:/[full_path]/javaagent-lite-1.0.0-SNAPSHOT.jar"  start on first free port range [9250 - 9299].
+   c) JAVA_OPTS="$JAVA_OPTS -javaagent:/[full_path]/javaagent-lite-1.0.0-SNAPSHOT.jar"  start on first free port, range [9250 - 9299].
 
 
 Enjoy…
