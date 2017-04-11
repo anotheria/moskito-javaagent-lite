@@ -1,28 +1,31 @@
 package org.moskito.javaagent;
 
+import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
+import org.aspectj.weaver.loadtime.ClassPreProcessorAgentAdapter;
+import org.distributeme.core.RMIRegistryUtil;
+import org.moskito.controlagent.endpoints.rmi.RMIEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 
-import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
-import net.anotheria.util.StringUtils;
-import org.aspectj.weaver.loadtime.ClassPreProcessorAgentAdapter;
-import org.distributeme.core.RMIRegistryUtil;
-import org.distributeme.core.conventions.SystemProperties;
-import org.moskito.controlagent.endpoints.rmi.RMIEndpoint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Main moskito-agent-light entry-point.
  */
 public class LightTransformationAgent implements ClassFileTransformer {
-	/**
-	 * Backend port default value.
-	 */
-	private static final int MOSKITO_BACKEND_PORT_DEFAULT_VALUE = -1;
 
+	/**
+	 * Name of the property for the moskito agent port.
+	 */
+	public static final String PROPERTY_MOSKITO_AGENT_PORT = "moskitoAgentPort";
+
+	/**
+	 * Default port if no port is specified.
+	 */
+	public static final int DEFAULT_MOSKITO_AGENT_PORT = 9411;
 
 	/**
 	 * Logging util.
@@ -45,7 +48,7 @@ public class LightTransformationAgent implements ClassFileTransformer {
 	 * 		{@link Instrumentation}
 	 */
 	public static void premain(String args, Instrumentation inst) {
-		LOG.info("premain method invoked with args: {} and inst: {}", args, inst);
+		LOG.debug("premain method invoked with args: {} and inst: {}", args, inst);
 		final ClassFileTransformer aspectTransformationAgent = new LightTransformationAgent();
 		inst.addTransformer(aspectTransformationAgent);
 		startMoskitoBackend();
@@ -77,8 +80,8 @@ public class LightTransformationAgent implements ClassFileTransformer {
 	private static void startMoskitoBackend() {
 		try {
 			int moskitoBackendPort = getBackendPort();
-			LOG.info("Starting Moskito-backend on using " + moskitoBackendPort + " port! !");
-			StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend();
+			LOG.info("Starting Moskito-backend on using " + moskitoBackendPort + " port!");
+			StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend(moskitoBackendPort);
 			RMIEndpoint.startRMIEndpoint();
 			LOG.info("Started Moskito-backend on " + RMIRegistryUtil.getRmiRegistryPort() + " port!");
 		} catch (final Throwable mise) {
@@ -93,11 +96,11 @@ public class LightTransformationAgent implements ClassFileTransformer {
 	 */
 	private static int getBackendPort() {
 		try {
-			if (StringUtils.isEmpty(SystemProperties.LOCAL_RMI_REGISTRY_PORT.get()))
-				return MOSKITO_BACKEND_PORT_DEFAULT_VALUE;
-			return SystemProperties.LOCAL_RMI_REGISTRY_PORT.getAsInt();
+			return Integer.parseInt(System.getProperty(PROPERTY_MOSKITO_AGENT_PORT, ""+DEFAULT_MOSKITO_AGENT_PORT));
 		} catch (final NumberFormatException e) {
-			return MOSKITO_BACKEND_PORT_DEFAULT_VALUE;
+			String portParameter = System.getProperty(PROPERTY_MOSKITO_AGENT_PORT);
+			LOG.error("Can't parse moskito agent port, will not start "+portParameter);
+			throw new AssertionError("Can't parse moskito agent port, will not start "+portParameter);
 		}
 	}
 
