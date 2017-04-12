@@ -90,54 +90,6 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-comm</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-maf</artifactId>
-                <version>2.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-tags</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <!-- for moskito sql -->
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-db</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-web</artifactId>
-                <version>2.0.1</version>
-            </dependency>
- 
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-prise</artifactId>
-                <version>2.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>net.anotheria</groupId>
-                <artifactId>ano-net</artifactId>
-                <version>2.0.0</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.5</version>
-            </dependency>
-            <dependency>
-                <groupId>hsqldb</groupId>
-                <artifactId>hsqldb</artifactId>
-                <version>1.8.0.7</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
                 <version>${aspect-j-version}</version>
@@ -152,39 +104,6 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspect-j-version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>2.2.2</version>
-            </dependency>
-            <!-- jersey -->
-            <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-client</artifactId>
-                <version>${jersey-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-server</artifactId>
-                <version>${jersey-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-servlet</artifactId>
-                <version>${jersey-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
-                <version>${jersey-version}</version>
-            </dependency>
-            <!-- jax-rs -->
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>jsr311-api</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -251,6 +170,7 @@
             </exclusions>
         </dependency>
 
+		<!--
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
@@ -259,7 +179,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 
@@ -290,71 +210,25 @@
                         <manifestEntries>
                             <Premain-Class>org.moskito.javaagent.LightTransformationAgent</Premain-Class>
                             <Agent-Class>org.moskito.javaagent.LightTransformationAgent</Agent-Class>
-                            <Boot-Class-Path>appdata/</Boot-Class-Path>
+                            <Boot-Class-Path>configuration/</Boot-Class-Path>
                             <Can-Redefine-Classes>true</Can-Redefine-Classes>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
                         <manifestSections>
                             <manifestSection>
-                                <name>Hudson</name>
+                                <name>Jenkins</name>
                                 <manifestEntries>
-                                    <SvnRevision>${env.SVN_REVISION}</SvnRevision>
                                     <BuildTag>${env.BUILD_TAG}</BuildTag>
                                     <BuildUrl>${env.BUILD_URL}</BuildUrl>
                                     <BuildId>${env.BUILD_ID}</BuildId>
                                     <BuildNumber>${env.BUILD_NUMBER}</BuildNumber>
-                                    <SvnRevision>${env.SVN_REVISION}</SvnRevision>
+                                    <SvnRevision>${env.GIT_REVISION}</SvnRevision>
                                     <JavaHome>${env.JAVA_HOME}</JavaHome>
                                 </manifestEntries>
                             </manifestSection>
                         </manifestSections>
                     </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <!-- here the phase you need -->
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/resources</directory>
-                                    <includes>
-                                        <include>aop.xml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <!-- create special appdata folder - to be used as bootPath -->
-                        <id>copy-resources-to-appdata</id>
-                        <!-- here the phase you need -->
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/appdata</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/resources</directory>
-                                    <includes>
-                                        <include>*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -389,7 +263,7 @@
                                     <manifestEntries>
                                         <Premain-Class>org.moskito.javaagent.LightTransformationAgent</Premain-Class>
                                         <Agent-Class>org.moskito.javaagent.LightTransformationAgent</Agent-Class>
-                                        <Boot-Class-Path>appdata/</Boot-Class-Path>
+                                        <Boot-Class-Path>configuration/</Boot-Class-Path>
                                         <Can-Redefine-Classes>true</Can-Redefine-Classes>
                                         <Can-Retransform-Classes>true</Can-Retransform-Classes>
                                     </manifestEntries>
