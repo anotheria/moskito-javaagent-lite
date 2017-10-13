@@ -4,9 +4,7 @@ MoSKito Javaagent Light, a quick start of MoSKito Monitoring in your application
 
 ### 1 Build and enable.
 
-  a). Get javaagent-lite-1.0.0-SNAPSHOT.jar  artifact from {javaagent-home}/target - directory  and   put it to  some location
-  
-  b). Get {javaagent-home}/target/appdata  directory to same location ( provides all required configurations and will be used as bootPath for agent)
+   Get javaagent-lite-1.0.0-SNAPSHOT.jar  artifact from {javaagent-home}/target - directory  and   put it to  some location
 
 ### 2 Add  moskito javaagent-lite to your app, as  java-agent
    	as example:
